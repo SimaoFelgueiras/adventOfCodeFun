@@ -21,7 +21,6 @@ fun main() {
     }
 
     fun cardScratches(card: String, index: Int): Int {
-        card.println()
         val numbers = card.split(":")[1]
         val (winNumbers, gameNumbers) = numbers.split("|")
         val winDigits = Regex("[0-9]+").findAll(winNumbers)
@@ -55,16 +54,30 @@ fun main() {
         return sum
     }
 
-    fun part2(input: List<String>): Int {
+    fun part2Recursive(input: List<String>): Int {
         input.forEachIndexed { index, _ ->
            recursiveSolution(input, index)
         }
         return counter
     }
 
+    fun part2(input: List<String>): Int {
+        return input.map { value ->
+            val tokens = value.split(Regex(" +")).drop(2)
+            val winningNumbers = tokens.takeWhile { it != "|" }.map { it.toInt() }
+            val numbers = tokens.takeLastWhile { it != "|" }.map { it.toInt() }
+            winningNumbers.count { it in numbers }
+        }.reversed()
+            .fold(emptyList<Int>()) { acc, winCount ->
+                val count = 1 + (0..<winCount).sumOf { acc[it] }
+                listOf(count) + acc
+            }.sum()
+    }
+
 
     val input = readInput("Day04")
     val input2 = readInput("Day04")
     part1(input).println()
+    part2Recursive(input2).println()
     part2(input2).println()
 }
