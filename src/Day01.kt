@@ -55,7 +55,9 @@ fun main() {
                 }
             }
         }
+        digitList.println()
         digitList.removeAll { it=="0" }
+        digitList.println()
         return if(digitList.size==1){
             (digitList.first() + digitList.first()).toInt()
         }else {
